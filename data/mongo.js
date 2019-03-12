@@ -34,17 +34,22 @@ class MongoDB {
     return this.flaggedUser.create({ username: username, serverName: serverName });
   }
 
-  async deleteUser(username, serverName) {
+  async deleteUserByServerName(username, serverName) {
     return this.flaggedUser.findOneAndDelete({
       username: username,
       serverName: serverName
     });
   }
 
+  async deleteUser(username) {
+    return this.flaggedUser.deleteMany({
+      username: username
+    });
+  }
+
   async findUsers(serverName) {
     let dateBack = new Date();                  // create a date
     dateBack.setDate(dateBack.getDate() - 14);  // set the date to 14 days back
-    console.log(dateBack);
     return this.flaggedUser
       .find({ serverName: serverName })         // search the db based on the servername, get all documents for that server.
       .where('createdAt')                       // where the createAt property so we can chain.

@@ -1,0 +1,20 @@
+const router = require('express').Router();
+const deleteUser = require('../controllers/deleteOne.js');
+const dateString = require('../../components/dateString.js');
+
+router.route('/').delete((req, res) => {
+  console.log(dateString(), req.method, req.originalUrl);
+  let userData;
+
+  req.on('data', (chunk) => {
+    userData = JSON.parse(chunk);
+  });
+
+  req.on('end', async () => {
+    let data = await deleteUser(userData.username, userData.serverName);
+    if (data === null) res.send('did not find user: ' + JSON.stringify(userData));
+    else res.send('deleted user: ' + JSON.stringify(data));
+  });
+});
+
+module.exports = router;

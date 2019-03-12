@@ -1,18 +1,20 @@
 const router = require('express').Router();
-const insert = require('../controllers/insert.js');
+const deleteAll = require('../controllers/eadmin.js');
 const dateString = require('../../components/dateString.js');
 
-router.route('/').post((req, res) => {
+router.route('/').delete((req, res) => {
   console.log(dateString(), req.method, req.originalUrl);
   let userData;
+
+  req.on('error', (err) => console.err(err));
 
   req.on('data', (chunk) => {
     userData = JSON.parse(chunk);
   });
 
-  req.on('end', () => {
-    insert(userData.username, userData.serverName);
-    res.send('Inserted user: ' + JSON.stringify(userData));
+  req.on('end', async () => {
+    let data = await deleteAll(userData.username);
+    res.send(JSON.stringify(data));
   });
 });
 
