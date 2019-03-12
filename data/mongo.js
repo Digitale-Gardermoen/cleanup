@@ -42,7 +42,13 @@ class MongoDB {
   }
 
   async findUsers(serverName) {
-    return this.flaggedUser.find({ serverName: serverName });
+    let dateBack = new Date();                  // create a date
+    dateBack.setDate(dateBack.getDate() - 14);  // set the date to 14 days back
+    console.log(dateBack);
+    return this.flaggedUser
+      .find({ serverName: serverName })         // search the db based on the servername, get all documents for that server.
+      .where('createdAt')                       // where the createAt property so we can chain.
+      .lte(dateBack);                           // check if the document have less than or equals to the date.
   }
 }
 
