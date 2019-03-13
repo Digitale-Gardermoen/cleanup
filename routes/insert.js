@@ -11,8 +11,14 @@ router.route('/').post((req, res) => {
   });
 
   req.on('end', () => {
-    insert(userData.username, userData.serverName);
-    res.send('Inserted user: ' + JSON.stringify(userData));
+    try {
+      insert(userData.username, userData.serverName);
+      res.send('Inserted user: ' + JSON.stringify(userData));
+    }
+    catch (error) {
+      console.error(dateString(), '- got error');
+      console.error(error);
+    }
   });
 });
 

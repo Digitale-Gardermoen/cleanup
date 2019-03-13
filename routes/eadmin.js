@@ -13,8 +13,14 @@ router.route('/').delete((req, res) => {
   });
 
   req.on('end', async () => {
-    let data = await deleteAll(userData.username);
-    res.send(JSON.stringify(data));
+    try {
+      let data = await deleteAll(userData.username);
+      res.send(JSON.stringify(data));
+    }
+    catch (error) {
+      console.error(dateString(), '- got error');
+      console.error(error);
+    }
   });
 });
 

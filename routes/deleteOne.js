@@ -11,9 +11,15 @@ router.route('/').delete((req, res) => {
   });
 
   req.on('end', async () => {
-    let data = await deleteUser(userData.username, userData.serverName);
-    if (data === null) res.send('did not find user: ' + JSON.stringify(userData));
-    else res.send('deleted user: ' + JSON.stringify(data));
+    try {
+      let data = await deleteUser(userData.username, userData.serverName);
+      if (data === null) res.send('did not find user: ' + JSON.stringify(userData));
+      else res.send('deleted user: ' + JSON.stringify(data));
+    }
+    catch (error) {
+      console.error(dateString(), '- got error');
+      console.error(error);
+    }
   });
 });
 
