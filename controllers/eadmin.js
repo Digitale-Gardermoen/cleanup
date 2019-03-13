@@ -6,8 +6,8 @@ class EAdmin {
     return await db.deleteUser(username);
   }
 
-  insert(username) {
-    db.insertUser(username);
+  insertAll(username) {
+    return db.insertEadminUser(username);
   }
 }
 

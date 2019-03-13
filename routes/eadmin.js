@@ -2,6 +2,8 @@ const router = require('express').Router();
 const EAdmin = require('../controllers/eadmin.js');
 const dateString = require('../components/dateString.js');
 
+const eadmin = new EAdmin();
+
 router.route('/').delete((req, res) => {
   console.log(dateString(), req.method, req.originalUrl);
   let userData;
@@ -14,7 +16,7 @@ router.route('/').delete((req, res) => {
 
   req.on('end', async () => {
     try {
-      let data = await EAdmin.deleteAll(userData.username);
+      let data = await eadmin.deleteAll(userData.username);
       res.send([ JSON.stringify(data) ]);
     }
     catch (error) {
@@ -32,10 +34,10 @@ router.route('/').delete((req, res) => {
     userData = JSON.parse(chunk);
   });
 
-  req.on('end', () => {
+  req.on('end', async () => {
     try {
-      EAdmin.insert(userData.username);
-      res.send([ 'Inserted user: ' + JSON.stringify(userData) ]);
+      let data = await eadmin.insertAll(userData.username);
+      res.send('Inserted user(s): ' + JSON.stringify(data));
     }
     catch (error) {
       console.error(dateString(), '- got error');

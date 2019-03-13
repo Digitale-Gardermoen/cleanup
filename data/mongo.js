@@ -12,6 +12,10 @@ const flaggedUserSchema = new Schema(
   }
 );
 
+const serverSchema = new Schema({
+  serverName: String
+});
+
 class MongoDB {
   constructor() {
     this.conn = mongoose.connect(
@@ -27,13 +31,32 @@ class MongoDB {
     );
 
     this.flaggedUser = mongoose.model('flaggedUser', flaggedUserSchema);
+    this.servers = mongoose.model('server', serverSchema)
 
   }
 
   async insertUser(username, serverName) {
     return this.flaggedUser.create({ username: username, serverName: serverName });
   }
+  
+  async insertEadminUser(username) {
+    try {
+      let insertArray = [];
+      let serverList = await this.servers.find({}).select('-_id');
 
+      for (let i in serverList) {
+        let insertObj = { username: username, serverName: serverList[i].serverName };
+        this.flaggedUser.create(insertObj);
+        insertArray.push(insertObj);
+      }
+
+      return insertArray;
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+  
   async deleteUserByServerName(username, serverName) {
     return this.flaggedUser.findOneAndDelete({
       username: username,
