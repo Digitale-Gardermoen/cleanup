@@ -14,6 +14,7 @@ router.route('/:servername').get(async (req, res) => {
   catch (error) {
     console.error(dateString(), '- got error');
     console.error(error);
+    res.send([ 0, 'caught error']);
   }
 });
 

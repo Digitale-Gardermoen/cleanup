@@ -1,8 +1,14 @@
 const MongoDB = require('../data/mongo.js');
 const db = new MongoDB();
 
-async function deleteAll(username) {
-  return await db.deleteUser(username);
+class EAdmin {
+  async deleteAll(username) {
+    return await db.deleteUser(username);
+  }
+
+  insert(username) {
+    db.insertUser(username);
+  }
 }
 
-module.exports = deleteAll;
+module.exports = EAdmin;

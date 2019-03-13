@@ -13,12 +13,13 @@ router.route('/').delete((req, res) => {
   req.on('end', async () => {
     try {
       let data = await deleteUser(userData.username, userData.serverName);
-      if (data === null) res.send('did not find user: ' + JSON.stringify(userData));
-      else res.send('deleted user: ' + JSON.stringify(data));
+      if (data === null) res.send([ 'did not find user: ' + JSON.stringify(userData) ]);
+      else res.send([ 'deleted user: ' + JSON.stringify(data) ]);
     }
     catch (error) {
       console.error(dateString(), '- got error');
       console.error(error);
+      res.send([ 0, 'got error, check if user was removed with fetch' ]);
     }
   });
 });

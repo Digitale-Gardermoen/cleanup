@@ -4,6 +4,7 @@ const basicAuth = require('express-basic-auth');
 const https = require('https');
 const fs = require('fs');
 const dateString = require('./components/dateString.js');
+const getUnauthorizedResponse = require('./components/getUnauthorizedResponse.js');
 //const jsonParser = require('body-parser').json();
 
 console.log('############### CLEANUP.DGI.NO START UP ###############');
@@ -14,6 +15,8 @@ const app = new express();
 const serverCert = process.env.HTTPS_CERT;
 const serverKey = process.env.HTTPS_KEY;
 const httpsPort = process.env.HTTPS_PORT;
+const authUser = process.env.AUTH_USER;
+const authPass = process.env.AUTH_PASS;
 
 const options = {
   key: fs.readFileSync(serverKey),
@@ -21,7 +24,15 @@ const options = {
 };
 
 //app.use(jsonParser);
-app.use(basicAuth({ users: { 'admin': 'supersecret' } }));
+let basicAuthOptions = {
+  users: {},
+  unauthorizedResponse: getUnauthorizedResponse,
+  challenge: true
+};
+
+basicAuthOptions.users[authUser] = authPass;
+
+app.use(basicAuth(basicAuthOptions));
 app.use('/insert', require('./routes/insert.js'));
 app.use('/fetch', require('./routes/fetch.js'));
 app.use('/deleteOne', require('./routes/deleteOne.js'));

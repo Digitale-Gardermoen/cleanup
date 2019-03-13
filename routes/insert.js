@@ -18,6 +18,7 @@ router.route('/').post((req, res) => {
     catch (error) {
       console.error(dateString(), '- got error');
       console.error(error);
+      res.send([ 0, 'caught error, check if user was inserted with fetch' ])
     }
   });
 });
