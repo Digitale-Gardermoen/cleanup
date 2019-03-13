@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const fetch = require('../controllers/fetch.js');
-const dateString = require('../../components/dateString.js');
+const dateString = require('../components/dateString.js');
 
 router.route('/:servername').get(async (req, res) => {
   console.log(dateString(), req.method, req.originalUrl);

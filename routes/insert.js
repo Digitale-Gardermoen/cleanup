@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const insert = require('../controllers/insert.js');
-const dateString = require('../../components/dateString.js');
+const dateString = require('../components/dateString.js');
 
 router.route('/').post((req, res) => {
   console.log(dateString(), req.method, req.originalUrl);

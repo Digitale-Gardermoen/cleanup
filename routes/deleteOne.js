@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const deleteUser = require('../controllers/deleteOne.js');
-const dateString = require('../../components/dateString.js');
+const dateString = require('../components/dateString.js');
 
 router.route('/').delete((req, res) => {
   console.log(dateString(), req.method, req.originalUrl);

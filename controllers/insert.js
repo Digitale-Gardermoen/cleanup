@@ -1,4 +1,4 @@
-const MongoDB = require('../../data/mongo.js');
+const MongoDB = require('../data/mongo.js');
 const db = new MongoDB();
 
 function insert(username, serverName) {
