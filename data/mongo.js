@@ -75,7 +75,7 @@ class MongoDB {
   }
 
   async deleteUser(username) {
-    return await this.flaggedUser.deleteMany({
+    return this.flaggedUser.deleteMany({
       username: username
     });
   }
