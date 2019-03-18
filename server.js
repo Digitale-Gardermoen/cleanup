@@ -5,7 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const dateString = require('./components/dateString.js');
 const getUnauthorizedResponse = require('./components/getUnauthorizedResponse.js');
-//const jsonParser = require('body-parser').json();
+const jsonParser = require('body-parser').json();
 
 console.log('############### CLEANUP.DGI.NO START UP ###############');
 console.log(dateString(), '- starting https server')
@@ -23,7 +23,6 @@ const options = {
   cert: fs.readFileSync(serverCert)
 };
 
-//app.use(jsonParser);
 let basicAuthOptions = {
   users: {},
   unauthorizedResponse: getUnauthorizedResponse,
@@ -32,6 +31,7 @@ let basicAuthOptions = {
 
 basicAuthOptions.users[authUser] = authPass;
 
+app.use(jsonParser);
 app.use(basicAuth(basicAuthOptions));
 app.use('/insert', require('./routes/insert.js'));
 app.use('/fetch', require('./routes/fetch.js'));

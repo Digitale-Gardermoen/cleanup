@@ -1,4 +1,5 @@
 require('dotenv').config();
+const dateString = require('../components/dateString.js');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -10,17 +11,22 @@ const flaggedUserSchema = new Schema(
   {
     timestamps: true
   }
-);
+)
+
+flaggedUserSchema.index({ username: -1, serverName: 1 }, { unique: true, name: 'testname' });
 
 const serverSchema = new Schema({
   serverName: String
 });
+
+
 
 class MongoDB {
   constructor() {
     this.conn = mongoose.connect(
       process.env.MONGOOSE_MONGO, {
         useNewUrlParser: true,
+        useCreateIndex: true,                 // use this to remove the warning: DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
         user: process.env.MONGOOSE_USERNAME,
         pass: process.env.MONGOOSE_PASSWORD,
         dbName: process.env.MONGOOSE_DBNAME
@@ -31,8 +37,7 @@ class MongoDB {
     );
 
     this.flaggedUser = mongoose.model('flaggedUser', flaggedUserSchema);
-    this.servers = mongoose.model('server', serverSchema)
-
+    this.servers = mongoose.model('server', serverSchema);
   }
 
   async insertUser(username, serverName) {
@@ -41,19 +46,24 @@ class MongoDB {
   
   async insertEadminUser(username) {
     try {
-      let insertArray = [];
-      let serverList = await this.servers.find({}).select('-_id');
+      let insertArray = [];                                         // create the array we are inserting and returning
+      let serverList = await this.servers.find({}).select('-_id');  // get the servers we are addind to the collection
 
       for (let i in serverList) {
+        //Loop over the serverlist to create a insert object, then append it to the insertArray
         let insertObj = { username: username, serverName: serverList[i].serverName };
-        this.flaggedUser.create(insertObj);
         insertArray.push(insertObj);
       }
-
+      // use insertMany to insert the entire array, instead of doing this in the loop.
+      // this unsures we can get one error message instead of n * amount of servers.
+      // any error that happens here is in most cases from mongoose/MongoDB
+      await this.flaggedUser.insertMany(insertArray)
       return insertArray;
     }
     catch (error) {
-      console.error(error);
+      console.error(dateString(), '- got error');
+      console.error(error.errmsg);
+      return [0, 'user was not inserted'];
     }
   }
   
@@ -65,7 +75,7 @@ class MongoDB {
   }
 
   async deleteUser(username) {
-    return this.flaggedUser.deleteMany({
+    return await this.flaggedUser.deleteMany({
       username: username
     });
   }
