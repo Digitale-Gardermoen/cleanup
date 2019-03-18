@@ -17,7 +17,7 @@ const options = {
     'Content-Length': Buffer.byteLength(data),
     'Content-Type': 'application/json'
   },
-  auth: 'admin:supersecret'
+  auth: 'admin:secret'
 };
 
 const req = https.request(options, (res) => {

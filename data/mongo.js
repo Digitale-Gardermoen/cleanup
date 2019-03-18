@@ -41,7 +41,14 @@ class MongoDB {
   }
 
   async insertUser(username, serverName) {
-    return this.flaggedUser.create({ username: username, serverName: serverName });
+    try {
+      return await this.flaggedUser.create({ username: username, serverName: serverName });
+    }
+    catch (error) {
+      console.error(dateString(), '- got error');
+      console.error(error.name, error.errmsg);
+      return [0, 'user was not inserted'];
+    }
   }
   
   async insertEadminUser(username) {
@@ -62,7 +69,7 @@ class MongoDB {
     }
     catch (error) {
       console.error(dateString(), '- got error');
-      console.error(error.errmsg);
+      console.error(error.name, error.errmsg);
       return [0, 'user was not inserted'];
     }
   }
