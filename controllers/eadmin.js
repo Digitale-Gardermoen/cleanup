@@ -4,7 +4,16 @@ const dateString = require('../components/dateString.js');
 
 class EAdmin {
   async deleteAll(username) {
-    return await db.deleteUser(username);
+    try {
+      let data = await db.deleteUser(username);
+      if (!data || data === null) return [0, 'returned data is null/undefined'];
+      return data;
+    }
+    catch (error) {
+      console.error(dateString(), '- got error');
+      console.error(error);
+      return [0, 'user was not deleted'];
+    }
   }
 
   async insertAll(username) {
