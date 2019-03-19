@@ -5,6 +5,7 @@ const dateString = require('../components/dateString.js');
 router.route('/').delete(async (req, res) => {
   console.log(dateString(), req.method, req.originalUrl);
   try {
+    console.log(req.body);
     let data = await deleteUser(req.body.username, req.body.serverName);
     if (data[0] === 0) res.send(data);
     else res.send('deleted user: ' + JSON.stringify(data));

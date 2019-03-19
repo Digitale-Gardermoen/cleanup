@@ -6,7 +6,7 @@ async function deleteUser(username, serverName) {
   try {
     let data = await db.deleteUserByServerName(username, serverName); // username and servername is case-sensitive
     if (data === null) return 'did not find user: ' + data;
-    else return 'deleted user: ' + data;
+    else return data;
   }
   catch (error) {
     console.error(dateString(), '- got error');

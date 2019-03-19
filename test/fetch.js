@@ -5,8 +5,8 @@ const options = {
   host: 'cleanup.dgi.no',
   port: 8443,
   method: 'GET',
-  path: '/fetch/testserver1',
-  auth: 'admin:supersecret'
+  path: '/fetch/TESTSERVER1',
+  auth: 'admin:secret'
 };
 
 const req = https.request(options, (res) => {
