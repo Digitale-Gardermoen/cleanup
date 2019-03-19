@@ -7,6 +7,7 @@ let data = {
 };
 
 data = JSON.stringify(data);
+console.log(data);
 
 const options = {
   host: 'cleanup.dgi.no',
