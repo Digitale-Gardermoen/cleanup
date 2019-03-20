@@ -4,8 +4,11 @@ const dateString = require('../components/dateString.js');
 
 async function insert(username, serverName) {
   try {
-    let data = await db.insertUser(username, serverName);
-    return data;
+    if ((!username) || (!serverName)) return [0, 'Missing username or serverName'];
+    else {
+      let data = await db.insertUser(username, serverName);
+      return data;
+    }
   }
   catch (error) {
     console.error(dateString(), '- got error');

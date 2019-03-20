@@ -5,21 +5,29 @@ const Schema = mongoose.Schema;
 
 const flaggedUserSchema = new Schema(
   {
-    username: String,
-    serverName: String
+    username: { type: String, required: true },
+    serverName: { type: String, required: true }
   },
   {
     timestamps: true
   }
 )
 
-flaggedUserSchema.index({ username: -1, serverName: 1 }, { unique: true, name: 'testname' });
+flaggedUserSchema.index({ username: -1, serverName: 1 }, { unique: true, name: 'ix_unique-username-servername' });
 
 const serverSchema = new Schema({
-  serverName: String
+  serverName: { type: String, unique: true }
 });
 
-
+const serverArray = JSON.parse(process.env.SERVER_LIST);
+mongoose.model('server', serverSchema)
+  .insertMany(serverArray)
+  .catch((error) => {
+    if ((error.code != 11000) || (error.name === undefined)) {
+      console.error(dateString(), '- got error');
+      console.error(error);
+    }
+  });
 
 class MongoDB {
   constructor() {
@@ -50,7 +58,7 @@ class MongoDB {
       return [0, 'user was not inserted'];
     }
   }
-  
+
   async insertEadminUser(username) {
     try {
       let insertArray = [];                                         // create the array we are inserting and returning
@@ -70,10 +78,10 @@ class MongoDB {
     catch (error) {
       console.error(dateString(), '- got error');
       console.error(error.name, error.errmsg);
-      return [0, 'user was not inserted'];
+      return [0, 'user was not inserted', error.name, error.errmsg];
     }
   }
-  
+
   async deleteUserByServerName(username, serverName) {
     return this.flaggedUser.findOneAndDelete({
       username: username,

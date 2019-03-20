@@ -5,7 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const dateString = require('./components/dateString.js');
 const getUnauthorizedResponse = require('./components/getUnauthorizedResponse.js');
-const jsonParser = require('body-parser').json();
+const jsonParser = require('body-parser').json({ type: 'application/json' });
 
 console.log('############### CLEANUP.DGI.NO START UP ###############');
 console.log(dateString(), '- starting https server')
@@ -31,11 +31,11 @@ let basicAuthOptions = {
 
 basicAuthOptions.users[authUser] = authPass;
 
-app.use(jsonParser);                  // use a bodyparser so we can get the body as a object.
+app.use(jsonParser);
 app.use(basicAuth(basicAuthOptions)); // setup basic auth
 app.use('/insert', require('./routes/insert.js'));
 app.use('/fetch', require('./routes/fetch.js'));
-app.use('/deleteOne', require('./routes/deleteOne.js'));
+app.use('/deleteone', require('./routes/deleteOne.js'));
 app.use('/eadmin', require('./routes/eadmin.js'));
 
 https.createServer(options, app).listen(httpsPort);
