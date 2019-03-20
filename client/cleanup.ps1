@@ -2,6 +2,7 @@
     [String]$path
 )
 
+#param is -path "\\$($env:computername)\share$\"
 if (!$path) {
     Write-Host "Missing path, Exiting session"
     Exit
@@ -10,8 +11,8 @@ if (!$path) {
 $username = "admin"
 $password = ConvertTo-SecureString "secret" -AsPlainText -Force
 $cred = New-Object -typename System.Management.Automation.PSCredential -argumentlist $username, $password
-$uri = "https://cleanup.dgi.no:8443/fetch/$($env:computername)"
-$deleteUri = "https://cleanup.dgi.no:8443/deleteOne/"
+$uri = "https://cleanup.dgi.no/fetch/$($env:computername)"
+$deleteUri = "https://cleanup.dgi.no/deleteone/"
 
 $result = Invoke-RestMethod -Uri $uri -Credential $cred
 if ($result -eq "No data") {
@@ -31,7 +32,7 @@ $result | ForEach-Object {
         $folders = Get-ChildItem -Path $path -Force | Where-Object { $($_.Name) -like "$($user).AD*" }
         if (($folders) -and ($folders.Length -gt 0)) {
             try {
-                $folders | Remove-Item -Force -Recurse -WhatIf -ErrorAction Stop -ErrorVariable $folderError
+                $folders | Remove-Item -Force -Recurse -ErrorAction Stop -ErrorVariable $folderError
             }
             catch {
                 if ($folderError) {
