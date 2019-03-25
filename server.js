@@ -7,7 +7,7 @@ const dateString = require('./components/dateString.js');
 const getUnauthorizedResponse = require('./components/getUnauthorizedResponse.js');
 const jsonParser = require('body-parser').json({ type: 'application/json' });
 
-console.log('############### CLEANUP.DGI.NO START UP ###############');
+console.log('############### WEB SERVER START UP ###############');
 console.log(dateString(), '- starting https server')
 
 const app = new express();
