@@ -6,10 +6,19 @@ if (!$username) {
     exit
 }
 
+try {
+    $cred = Import-Clixml -Path ".\Credentials_$($env:USERNAME)_$($env:COMPUTERNAME).xml" -ErrorAction Stop -ErrorVariable $credentialError
+}
+catch {
+    Write-host "Error getting Credential file"
+    if (!$cred) {
+        Write-Host "File does not exist."
+    }
+    Write-Host $credentialError
+    Exit
+}
+
 $uri = 'https://cleanup.dgi.no/eadmin'
-$reqUser = 'admin'
-$reqPassword = ConvertTo-SecureString "secret" -AsPlainText -Force
-$cred = New-Object -typename System.Management.Automation.PSCredential -argumentlist $reqUser, $reqPassword
 $body = @{username = $username}
 
 try {

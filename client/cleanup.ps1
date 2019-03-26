@@ -2,16 +2,25 @@
     [String]$path
 )
 
-#param is -path "\\$($env:computername)\share$\"
+#param is -path "\\$($env:COMPUTERNAME)\share$\"
 if (!$path) {
     Write-Host "Missing path, Exiting session"
     Exit
 }
 
-$username = "admin"
-$password = ConvertTo-SecureString "secret" -AsPlainText -Force
-$cred = New-Object -typename System.Management.Automation.PSCredential -argumentlist $username, $password
-$uri = "https://cleanup.dgi.no/fetch/$($env:computername)"
+try {
+    $cred = Import-Clixml -Path ".\Credentials_$($env:USERNAME)_$($env:COMPUTERNAME).xml" -ErrorAction Stop -ErrorVariable $credentialError
+}
+catch {
+    Write-host "Error getting Credential file"
+    if (!$cred) {
+        Write-Host "File does not exist."
+    }
+    Write-Host $credentialError
+    Exit
+}
+
+$uri = "https://cleanup.dgi.no/fetch/$($env:COMPUTERNAME)"
 $deleteUri = "https://cleanup.dgi.no/deleteone/"
 
 $result = Invoke-RestMethod -Uri $uri -Credential $cred
@@ -27,7 +36,7 @@ $result | ForEach-Object {
     }
     else {
         $user = $_.username
-        $deleteBody = @{"username" = "$($_.username)";"serverName" = "$($env:computername)"}
+        $deleteBody = @{"username" = "$($_.username)";"serverName" = "$($env:COMPUTERNAME)"}
         
         $folders = Get-ChildItem -Path $path -Force | Where-Object { $($_.Name) -like "$($user).AD*" }
         if (($folders) -and ($folders.Length -gt 0)) {

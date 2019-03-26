@@ -5,3 +5,4 @@ sample.js
 *.key
 *.pem
 text.txt
+*.xml
