@@ -11,6 +11,7 @@ console.log('############### WEB SERVER START UP ###############');
 console.log(dateString(), '- starting https server')
 
 const app = new express();
+app.disable('x-powered-by');
 
 const serverCert = process.env.HTTPS_CERT;
 const serverKey = process.env.HTTPS_KEY;
