@@ -103,6 +103,10 @@ class MongoDB {
       .where('createdAt')                       // where the createAt property so we can chain.
       .lte(dateBack);                           // check if the document have less than or equals to the date.
   }
+
+  async addServer(serverName) {
+    return await this.servers.create({ serverName: serverName });
+  }
 }
 
 module.exports = MongoDB;
