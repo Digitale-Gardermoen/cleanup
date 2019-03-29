@@ -41,6 +41,7 @@ app.use('/insert', require('./routes/insert.js'));
 app.use('/fetch', require('./routes/fetch.js'));
 app.use('/deleteone', require('./routes/deleteOne.js'));
 app.use('/eadmin', require('./routes/eadmin.js'));
+app.use('/addserver', require('./routes/addServer.js'));
 
 // finally setup the https server with the current configuration
 https.createServer(options, app).listen(httpsPort);
