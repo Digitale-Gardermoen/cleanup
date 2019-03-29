@@ -1,11 +1,11 @@
 param (
-    [string]$username,
-    [String]$secret
+  [string]$username,
+  [String]$secret
 )
 
 if ((!$username) -or (!$secret)) {
-    Write-Host "No username or secret provided."
-    Exit
+  Write-Host "No username or secret provided."
+  Exit
 }
 
 $secureString = ConvertTo-SecureString $secret -AsPlainText -Force # Convert the password to a securestring
