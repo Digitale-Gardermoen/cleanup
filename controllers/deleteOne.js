@@ -5,8 +5,7 @@ const dateString = require('../components/dateString.js');
 async function deleteUser(username, serverName) {
   try {
     let data = await db.deleteUserByServerName(username, serverName); // username and servername is case-sensitive
-    if (data === null) return 'did not find user: ' + data;
-    else return data;
+    return JSON.stringify({ removed: data })
   }
   catch (error) {
     console.error(dateString(), '- got error');
