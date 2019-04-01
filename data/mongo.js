@@ -107,6 +107,10 @@ class MongoDB {
   async addServer(serverName) {
     return await this.servers.create({ serverName: serverName });
   }
+
+  async getServer(serverName) {
+    return await this.servers.find({ serverName: serverName })
+  }
 }
 
 module.exports = MongoDB;
