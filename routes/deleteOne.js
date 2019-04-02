@@ -6,12 +6,14 @@ router.route('/:serverName/:username').delete(async (req, res) => {
   console.log(dateString(), '-', req.method, req.originalUrl);
   try {
     let data = await deleteUser(req.params.username, req.params.serverName);
-    res.send(data);
+    res.status(data.statuscode);
+    if (data.statuscode === 200) res.json(data);
+    res.end();
   }
   catch (error) {
     console.error(dateString(), '- got error');
     console.error(error);
-    res.send([0, 'got error, check if user was removed with fetch']);
+    res.sendStatus(500);
   }
 });
 

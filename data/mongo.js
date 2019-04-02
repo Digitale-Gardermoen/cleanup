@@ -68,7 +68,7 @@ class MongoDB {
     catch (error) {
       console.error(dateString(), '- got error');
       console.error(error.name, error.errmsg);
-      return [0, 'user was not inserted', error.name, error.errmsg];
+      return 'errored';
     }
   }
 

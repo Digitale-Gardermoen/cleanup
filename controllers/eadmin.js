@@ -6,25 +6,28 @@ class EAdmin {
   async deleteAll(username) {
     try {
       let data = await db.deleteUser(username);
-      if (!data || data === null) return [0, 'returned data is null/undefined'];
-      return data;
+      if (data.deletedCount <= 0) return { statuscode: 404 };
+      else if (data.deletedCount < data.n) return { statuscode: 409 };
+      return { removed: data, statuscode: 200 };
     }
     catch (error) {
       console.error(dateString(), '- got error');
       console.error(error);
-      return [0, 'user was not deleted'];
+      return { statuscode: 500 };
     }
   }
-
+  
   async insertAll(username) {
     try {
-      return await db.insertEadminUser(username);
+      let data = await db.insertEadminUser(username);
+      if (data === 'errored') return { statuscode: 500 };
+      else if (!data) return { statuscode: 404 };
+      return { inserted: data, statuscode: 200 };
     }
     catch (error) {
-      // if the db function returns an error this is called, but the error isnt logged.
       console.error(dateString(), '- got error');
       console.error(error);
-      return [0, 'user was not inserted'];  // this returns to the route and gets resolved to the client.
+      return { statuscode: 500 };
     }
   }
 }

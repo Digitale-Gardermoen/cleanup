@@ -3,6 +3,7 @@ param (
 )
 
 if (!$username) {
+  Write-Host "No username given, exiting."
   exit
 }
 
@@ -18,16 +19,13 @@ catch {
   Exit
 }
 
-$uri = 'https://cleanup.dgi.no/eadmin'
-$body = @{username = $username}
+$uri = "https://cleanup.dgi.no/eadmin/$($username)"
 
 try {
   Invoke-RestMethod `
     -uri $uri `
     -Credential $cred `
     -Method 'DELETE' `
-    -Body ($body|ConvertTo-Json) `
-    -ContentType 'application/json' `
     -ErrorAction Stop `
     -ErrorVariable $deleteError
 }
