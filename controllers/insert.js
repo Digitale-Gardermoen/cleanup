@@ -7,7 +7,8 @@ async function insert(username, serverName) {
     if ((!username) || (!serverName)) return { statuscode: 404 };
     else {
       let data = await db.insertUser(username, serverName);
-      if (!data) return { statuscode: 404 };
+      if (data === 'errored') return { statuscode: 500 };
+      else if (!data) return { statuscode: 404 };
       return { inserted: data, statuscode: 200 };
     }
   }
