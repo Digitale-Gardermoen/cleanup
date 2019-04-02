@@ -19,16 +19,6 @@ const serverSchema = new Schema({
   serverName: { type: String, unique: true }
 });
 
-const serverArray = JSON.parse(process.env.SERVER_LIST);
-mongoose.model('server', serverSchema)
-  .insertMany(serverArray)
-  .catch((error) => {
-    if ((error.code != 11000) || (error.name === undefined)) {
-      console.error(dateString(), '- got error');
-      console.error(error);
-    }
-  });
-
 class MongoDB {
   constructor() {
     this.conn = mongoose.connect(
@@ -55,7 +45,7 @@ class MongoDB {
     catch (error) {
       console.error(dateString(), '- got error');
       console.error(error.name, error.errmsg);
-      return [0, 'user was not inserted'];
+      return 'errored'
     }
   }
 
@@ -72,13 +62,13 @@ class MongoDB {
       // use insertMany to insert the entire array, instead of doing this in the loop.
       // this unsures we can get one error message instead of n * amount of servers.
       // any error that happens here is in most cases from mongoose/MongoDB
-      await this.flaggedUser.insertMany(insertArray)
+      await this.flaggedUser.insertMany(insertArray);
       return insertArray;
     }
     catch (error) {
       console.error(dateString(), '- got error');
       console.error(error.name, error.errmsg);
-      return [0, 'user was not inserted', error.name, error.errmsg];
+      return 'errored';
     }
   }
 
@@ -106,6 +96,10 @@ class MongoDB {
 
   async addServer(serverName) {
     return await this.servers.create({ serverName: serverName });
+  }
+
+  async getServer(serverName) {
+    return await this.servers.find({ serverName: serverName })
   }
 }
 

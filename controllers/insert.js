@@ -4,16 +4,18 @@ const dateString = require('../components/dateString.js');
 
 async function insert(username, serverName) {
   try {
-    if ((!username) || (!serverName)) return [0, 'Missing username or serverName'];
+    if ((!username) || (!serverName)) return { statuscode: 404 };
     else {
       let data = await db.insertUser(username, serverName);
-      return data;
+      if (data === 'errored') return { statuscode: 500 };
+      else if (!data) return { statuscode: 404 };
+      return { inserted: data, statuscode: 200 };
     }
   }
   catch (error) {
     console.error(dateString(), '- got error');
     console.error(error);
-    return [0, 'caught error, check if user was inserted with fetch'];
+    return { statuscode: 500 };
   }
 }
 

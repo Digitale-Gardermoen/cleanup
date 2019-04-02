@@ -4,12 +4,14 @@ const dateString = require('../components/dateString.js');
 
 async function addServer(serverName) {
   try {
-    return await db.addServer(serverName);
+    let data = await db.addServer(serverName);
+    if (!data) return { statuscode: 404 }
+    return { insert: data, statuscode: 200 };
   }
   catch (error) {
     console.error(dateString(), '- got error');
     console.error(error);
-    return [0, 'caught error, check error log on the web server'];
+    return { statuscode: 500 };
   }
 }
 
