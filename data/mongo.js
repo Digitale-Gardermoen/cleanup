@@ -45,7 +45,8 @@ class MongoDB {
     catch (error) {
       console.error(dateString(), '- got error');
       console.error(error.name, error.errmsg);
-      return 'errored'
+      if (error.err.code === 11000) return 409;
+      return 500;
     }
   }
 
@@ -59,8 +60,8 @@ class MongoDB {
         let insertObj = { username: username, serverName: serverList[i].serverName };
         insertArray.push(insertObj);
       }
-      // use insertMany to insert the entire array, instead of doing this in the loop.
-      // this unsures we can get one error message instead of n * amount of servers.
+      // use insertMany to insert the entire array, instead of doing this in the loop
+      // this unsures we can get one error message instead of n * amount of servers
       // any error that happens here is in most cases from mongoose/MongoDB
       await this.flaggedUser.insertMany(insertArray);
       return insertArray;
@@ -68,7 +69,8 @@ class MongoDB {
     catch (error) {
       console.error(dateString(), '- got error');
       console.error(error.name, error.errmsg);
-      return 'errored';
+      if (error.err.code === 11000) return 409;
+      return 500;
     }
   }
 
