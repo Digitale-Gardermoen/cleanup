@@ -5,8 +5,9 @@ const dateString = require('../components/dateString.js');
 async function addServer(serverName) {
   try {
     let data = await db.addServer(serverName);
-    if (!data) return { statuscode: 404 }
-    return { insert: data, statuscode: 200 };
+    if (typeof data === 'number') return { statuscode: data };
+    else if (!data) return { statuscode: 404 }
+    return { inserted: data, statuscode: 200 };
   }
   catch (error) {
     console.error(dateString(), '- got error');

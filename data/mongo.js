@@ -97,7 +97,15 @@ class MongoDB {
   }
 
   async addServer(serverName) {
-    return await this.servers.create({ serverName: serverName });
+    try {
+      return await this.servers.create({ serverName: serverName });
+    }
+    catch (error) {
+      console.error(dateString(), '- got error');
+      console.error(error.name, error.errmsg);
+      if (error.err.code === 11000) return 409;
+      return 500;
+    }
   }
 
   async getServer(serverName) {
