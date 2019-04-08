@@ -20,7 +20,7 @@ class EAdmin {
   async insertAll(username) {
     try {
       let data = await db.insertEadminUser(username);
-      if (data === 'errored') return { statuscode: 500 };
+      if (typeof data === 'number') return { statuscode: data };
       else if (!data) return { statuscode: 404 };
       return { inserted: data, statuscode: 200 };
     }
