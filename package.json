@@ -1,6 +1,6 @@
 {
   "name": "cleanup",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Web api for storing and requesting when a user folder should be deleted",
   "main": "server.js",
   "scripts": {
