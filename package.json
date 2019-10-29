@@ -16,6 +16,6 @@
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-basic-auth": "^1.2.0",
-    "mongoose": "^5.4.17"
+    "mongoose": "^5.7.5"
   }
 }
