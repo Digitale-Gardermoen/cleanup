@@ -25,6 +25,7 @@ class MongoDB {
       process.env.MONGOOSE_MONGO, {
         useNewUrlParser: true,
         useCreateIndex: true,                 // use this to remove the warning: DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
+        useUnifiedTopology: true,
         user: process.env.MONGOOSE_USERNAME,
         pass: process.env.MONGOOSE_PASSWORD,
         dbName: process.env.MONGOOSE_DBNAME
