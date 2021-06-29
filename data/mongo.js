@@ -3,6 +3,13 @@ const dateString = require('../components/dateString.js');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// https://mongoosejs.com/docs/deprecations.html
+// To avoid deprecationwarnings
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true
+
 const flaggedUserSchema = new Schema(
   {
     username: { type: String, required: true },
@@ -23,9 +30,6 @@ class MongoDB {
   constructor() {
     this.conn = mongoose.connect(
       process.env.MONGOOSE_MONGO, {
-        useNewUrlParser: true,
-        useCreateIndex: true,                 // use this to remove the warning: DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
-        useUnifiedTopology: true,
         user: process.env.MONGOOSE_USERNAME,
         pass: process.env.MONGOOSE_PASSWORD,
         dbName: process.env.MONGOOSE_DBNAME
